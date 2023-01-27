@@ -12,7 +12,7 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI()
 
-# CHROMEDRIVER_PATH = os.path.join(base_dir, "drivers", "chromedriver")
+CHROMEDRIVER_PATH = os.path.join(base_dir, "drivers", "chromedriver")
 
 
 options = webdriver.ChromeOptions()
@@ -23,7 +23,10 @@ options.add_argument('--headless')
 async def login_seek(email: str, password: str):
     "Testing Login In seek.com.au"
     browser = webdriver.Chrome(
-        executable_path="./chromediver", options=options)
+        executable_path=CHROMEDRIVER_PATH, options=options)
+
+    # try:
+    # Initialize the web driver
 
     browser.get("https://www.seek.com.au/oauth/login?returnUrl=%2F")
 
@@ -60,7 +63,7 @@ async def login_seek(email: str, password: str):
 async def login_indeed(email: str, password: str):
     "Testing Login In seek.com.au"
     browser = webdriver.Chrome(
-        executable_path="./chromediver")
+        executable_path=CHROMEDRIVER_PATH)
 
     # try:
     # Initialize the web driver
