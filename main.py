@@ -28,8 +28,7 @@ options.add_argument('--remote-debugging-address=0.0.0.0')
 @app.post("/seek")
 async def login_seek(email: str, password: str):
     "Testing Login In seek.com.au"
-    browser = webdriver.Chrome(
-        executable_path=CHROMEDRIVER_PATH, options=options)
+    browser = webdriver.Chrome(options=options)
 
     # try:
     # Initialize the web driver
@@ -68,8 +67,7 @@ async def login_seek(email: str, password: str):
 @app.post("/indeed")
 async def login_indeed(email: str, password: str):
     "Testing Login In seek.com.au"
-    browser = webdriver.Chrome(
-        executable_path=CHROMEDRIVER_PATH)
+    browser = webdriver.Chrome(options=options)
 
     # try:
     # Initialize the web driver
