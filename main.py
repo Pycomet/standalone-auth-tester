@@ -1,4 +1,5 @@
 import os
+import time
 import requests
 from fastapi import FastAPI, HTTPException
 from selenium import webdriver
@@ -18,11 +19,11 @@ options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 
 
-@app.post("/seek")
+@app.get("/seek")
 async def login_seek(email: str, password: str):
     "Testing Login In seek.com.au"
     browser = webdriver.Chrome(
-        executable_path=CHROMEDRIVER_PATH, options=options)
+        executable_path="./chromediver", options=options)
 
     # try:
     # Initialize the web driver
@@ -31,7 +32,7 @@ async def login_seek(email: str, password: str):
 
     # Fill in the login form with the appropriate credentials
 
-    wait = WebDriverWait(browser, 10)
+    wait = WebDriverWait(browser, 5)
 
     email_field = wait.until(
         EC.visibility_of_element_located((By.ID, 'emailAddress')))
@@ -58,11 +59,11 @@ async def login_seek(email: str, password: str):
         return {"status": False, "message": "Seek login failed"}
 
 
-@app.post("/indeed")
+@app.get("/indeed")
 async def login_indeed(email: str, password: str):
     "Testing Login In seek.com.au"
     browser = webdriver.Chrome(
-        executable_path=CHROMEDRIVER_PATH, options=options)
+        executable_path="./chromediver")
 
     # try:
     # Initialize the web driver
@@ -71,15 +72,18 @@ async def login_indeed(email: str, password: str):
 
     # Fill in the login form with the appropriate credentials
 
-    wait = WebDriverWait(browser, 10)
+    wait = WebDriverWait(browser, 7)
 
+    email_field = wait.until(
+        EC.visibility_of_element_located((By.NAME, '__email')))
+
+    for character in email:
+        email_field.send_keys(character)
+        time.sleep(0.5)  # delay for 0.1 seconds
+    # email_field.send_keys(email)
+    email_field.send_keys(Keys.ENTER)
+    # password_field.send_keys(password)
     try:
-        email_field = wait.until(
-            EC.visibility_of_element_located((By.NAME, '__email')))
-
-        email_field.send_keys(email)
-        email_field.send_keys(Keys.ENTER)
-        # password_field.send_keys(password)
 
         login_with_pass = wait.until(EC.visibility_of_element_located(
             (By.ID, 'auth-page-google-password-fallback')))
