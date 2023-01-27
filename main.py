@@ -16,19 +16,13 @@ CHROMEDRIVER_PATH = os.path.join(base_dir, "drivers", "chromedriver")
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
-options.add_argument('--disable-gpu')
-options.add_argument('start-maximized')
-options.add_argument('disable-infobars')
-options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--no-sandbox')
-options.add_argument('--remote-debugging-port=9222')
-options.add_argument('--remote-debugging-address=0.0.0.0')
 
 
 @app.post("/seek")
 async def login_seek(email: str, password: str):
     "Testing Login In seek.com.au"
-    browser = webdriver.Chrome(options=options)
+    browser = webdriver.Chrome(
+        executable_path=CHROMEDRIVER_PATH, options=options)
 
     # try:
     # Initialize the web driver
@@ -67,7 +61,8 @@ async def login_seek(email: str, password: str):
 @app.post("/indeed")
 async def login_indeed(email: str, password: str):
     "Testing Login In seek.com.au"
-    browser = webdriver.Chrome(options=options)
+    browser = webdriver.Chrome(
+        executable_path=CHROMEDRIVER_PATH, options=options)
 
     # try:
     # Initialize the web driver
