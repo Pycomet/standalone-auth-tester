@@ -3,27 +3,44 @@ import time
 import requests
 from fastapi import FastAPI, HTTPException
 from selenium import webdriver
+import webdrivermanager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+import subprocess
+
+result = subprocess.run(["which", "chromium"], stdout=subprocess.PIPE)
+chromium_path = result.stdout.decode().strip()
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI()
 
-CHROMEDRIVER_PATH = os.path.join(base_dir, "drivers", "chromedriver")
+webdrivermanager.chrome.ChromeDriverManager().get_compatible_version()
+# CHROMEDRIVER_PATH = os.path.join(base_dir, "drivers", "chromedriver")
+CHROME_PATH = chromium_path
 
-
-options = webdriver.ChromeOptions()
+options = webdriver.FirefoxOptions()
 options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--ignore-ssl-errors=yes')
+options.add_argument('--ignore-certificate-errors')
+options.set_capability("browserVersion", "98")
+options.binary_location = CHROME_PATH
+
+
+@app.get("/")
+def start():
+    return {"status": True}
 
 
 @app.get("/seek")
 async def login_seek(email: str, password: str):
     "Testing Login In seek.com.au"
-    browser = webdriver.Chrome(
-        executable_path=CHROMEDRIVER_PATH, options=options)
+    browser = webdriver.Chrome(executable_path=CHROME_PATH, options=options)
 
     # try:
     # Initialize the web driver
@@ -62,8 +79,7 @@ async def login_seek(email: str, password: str):
 @app.get("/indeed")
 async def login_indeed(email: str, password: str):
     "Testing Login In seek.com.au"
-    browser = webdriver.Chrome(
-        executable_path=CHROMEDRIVER_PATH)
+    browser = webdriver.Chrome(executable_path=CHROME_PATH, options=options)
 
     # try:
     # Initialize the web driver
